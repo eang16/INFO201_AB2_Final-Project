@@ -5,6 +5,7 @@ library(ggplot2)
 library(plotly)
 source("salariesbyregion.R")
 source("salariesbymajor.R")
+source('salariesbytype.R')
 
 salariesbyregion <- read.csv("data/salaries-by-region.csv", stringsAsFactors = FALSE)
 
@@ -81,7 +82,7 @@ shinyServer <- function(input, output, session) {
             type = 'bar', 
             hoverinfo = 'text',
             text = ~paste(paste('Region: ', average.salary.by.region$Region), paste('Average Salary: $', selectedSalary()), sep = "<br />")) %>%
-          layout(title = 'Average Salaries by Region', yaxis = list(title = 'Average Salaires ($)'))
+          layout(title = 'Average Salaries by Region', yaxis = list(title = 'Average Salaries ($)'))
     })
   
   # Salaries by Individual Major Chart
@@ -108,6 +109,8 @@ shinyServer <- function(input, output, session) {
       y = ~chart2.data$Starting.Median.Salary,
       x = ~chart2.data$Undergraduate.Major,
       type = "bar",
+      width = 600,
+      height = 700,
       hoverinfo = 'text',
       text = ~paste(paste('Major:', chart2.data$Undergraduate.Major),
                     paste('Starting Salary: $', chart2.data$Starting.Median.Salary, sep = ""), sep = "<br />")
@@ -116,7 +119,7 @@ shinyServer <- function(input, output, session) {
         title = "Starting Salaries by Majors",
         xaxis = list(title = "Major", categoryarray = chart2.data$Starting.Median.Salary, categoryorder = "array"),
         yaxis = list(title = "Starting Salary ($)", range = c(0, 110000)),
-        autosize = F, width = 600, height = 700, margin = m
+        autosize = F, margin = m
       )
   })
   
@@ -130,6 +133,8 @@ shinyServer <- function(input, output, session) {
       y = ~chart3.data$Mid.Career.Median.Salary,
       x = ~chart3.data$Undergraduate.Major,
       type = "bar",
+      width = 600,
+      height = 700,
       hoverinfo = 'text',
       text = ~paste(paste('Major:', chart3.data$Undergraduate.Major),
                     paste('Mid-Career Salary: $', chart3.data$Mid.Career.Median.Salary, sep = ""), sep = "<br />")
@@ -138,8 +143,31 @@ shinyServer <- function(input, output, session) {
         title = "Mid Career Salaries by Major",
         xaxis = list(title = "Major", categoryarray = chart3.data$Mid.Career.Median.Salary, categoryorder = "array"),
         yaxis = list(title = "Mid-Career Salary ($)", range = c(0, 110000)),
-        autosize = F, width = 600, height = 700, margin = m
+        autosize = F, margin = m
       )
+  })
+  
+  #Average salaries by type of college bar graph
+  output$barplot <- renderPlotly({
+    chart.data <- salary.type.data %>%
+      filter(School.Type == input$type)
+    selectedSalary <- reactive({
+      if("Starting.Median.Salary" %in% input$salary) return (chart.data$Starting.Median.Salary)
+      if("Mid.Career.Median.Salary" %in% input$salary) return (chart.data$Mid.Career.Median.Salary)
+    })
+    plot_ly(x = ~chart.data$School.Name, 
+            y = ~selectedSalary(), 
+            type = 'bar', 
+            width = 1000,
+            height = 800,
+            hoverinfo = 'text',
+            text = ~paste(paste('College:', chart.data$School.Name),
+                          paste('Salary: $', selectedSalary(), sep = ""), sep = "<br />")) %>%
+      layout(title = 'Average Salaries by Type of College',
+             autosize = F, 
+             xaxis = list(size = 5, title = 'Colleges by Type', tickangle = 60),
+             yaxis = list(size = 5, title = 'Salary'), 
+             margin = list(t = 50, b = 500, l = 120, r = 150, pad = 4))
   })
 }
 

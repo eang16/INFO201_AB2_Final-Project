@@ -126,7 +126,7 @@ shinyUI(fluidPage(
                      ))), 
           
           # Panel 5: Salaires by All Majors Chart
-          tabPanel("Salaires by All Majors Chart", 
+          tabPanel("Salaries by All Majors Chart", 
                    sidebarLayout(sidebarPanel(
                      
                      sliderInput("range1",
@@ -148,6 +148,25 @@ shinyUI(fluidPage(
                      plotlyOutput("distPlot3")
                      
                    )
-                   ))
+                   )),
+          tabPanel('Salaries by Type of College',
+                   sidebarLayout(sidebarPanel(
+                     selectInput('type', 
+                                 h4("Select Type of College"), 
+                                 choices = list("Engineering" = "Engineering","Party" = "Party",
+                                                                                      "Liberal Arts" = "Liberal Arts", "Ivy League" = "Ivy League", 
+                                                                                      "State" = "State")),
+                     selectInput('salary', 
+                                 h4("Select Salary"), 
+                                 choices = list('Starting Median Salary' = 'Starting.Median.Salary',
+                                                                               'Mid-Career Median Salary' = 'Mid.Career.Median.Salary'))),
+                     mainPanel(p('The bar graph shows the average salaries by type of colleges. Users can 
+                                 select what type of colleges they want to see on the left. The graph will list the 
+                                 colleges of that certain type and will show the average salaries for those colleges. 
+                                 Users can also select whether they want to see average starting salaries or average mid-career 
+                                 salaries. From the graph, the user can compare the salaries for colleges of a certain 
+                                 type or compare the salaries for colleges of different types.'),
+                               plotlyOutput('barplot')))
+          )
 )
 ))
