@@ -106,7 +106,7 @@ shinyUI(fluidPage(
                                                   "Interior Design" = "Interior Design",
                                                   "International Relations" = "International Relations",
                                                   "Journalism" = "Journalism",
-                                                  "Management Information Systems (MIS)" = "Management Information Systems (MIS)",
+                                                  "Management Info Systems" = "Management Info Systems",
                                                   "Marketing" = "Marketing",
                                                   "Math" = "Math",
                                                   "Mechanical Engineering" = "Mechanical Engineering",

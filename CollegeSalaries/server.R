@@ -7,7 +7,6 @@ source("salariesbyregion.R")
 source("salariesbymajor.R")
 
 salariesbyregion <- read.csv("data/salaries-by-region.csv", stringsAsFactors = FALSE)
-salariesbymajor<-read.csv("data/degrees-that-pay-back.csv", stringsAsFactors = FALSE)
 
 # Margin for Salaries by Major graphs
 m <- list(
@@ -90,8 +89,7 @@ shinyServer <- function(input, output, session) {
     # Filter data
     chart.data <- salariesbymajor %>% 
       filter(Undergraduate.Major == input$major) 
-    
-    # Make chart
+
     plot_ly(
       x = colnames(chart.data[,2:4]),
       y = c(chart.data[1,2], chart.data[1,3], chart.data[1,4]),
