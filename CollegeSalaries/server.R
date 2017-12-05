@@ -92,12 +92,13 @@ shinyServer <- function(input, output, session) {
       filter(Undergraduate.Major == input$major) 
 
     plot_ly(
-      x = colnames(chart.data[,2:4]),
+      x = c("Starting Median Salary", "Mid Career Median Salary", "Salary Increase"),
       y = c(chart.data[1,2], chart.data[1,3], chart.data[1,4]),
       type = "bar") %>% 
       layout(
-        xaxis = list(chart.data[,2:4], categoryorder = "array", categoryarray = chart.data[,2:4]),
-        yaxis = list(range = c(0, 110000)))
+        title = "Salaries by Individual Majors",
+        xaxis = list(title= input$major, categoryorder = "array", categoryarray = chart.data[,2:4]),
+        yaxis = list(title = "Salary ($)", range = c(0, 110000)))
   })
   
   # Starting Median Salary By All Majors Chart
@@ -118,7 +119,7 @@ shinyServer <- function(input, output, session) {
       layout(
         title = "Starting Salaries by Majors",
         xaxis = list(title = "Major", categoryarray = chart2.data$Starting.Median.Salary, categoryorder = "array"),
-        yaxis = list(title = "Starting Salary ($)", range = c(0, 110000)),
+        yaxis = list(title = "Starting Salary ($)", range = c((min(chart2.data$Starting.Median.Salary) - 1000), (max(chart2.data$Starting.Median.Salary)+1000))),
         autosize = F, margin = m
       )
   })
@@ -142,7 +143,31 @@ shinyServer <- function(input, output, session) {
       layout(
         title = "Mid Career Salaries by Major",
         xaxis = list(title = "Major", categoryarray = chart3.data$Mid.Career.Median.Salary, categoryorder = "array"),
-        yaxis = list(title = "Mid-Career Salary ($)", range = c(0, 110000)),
+        yaxis = list(title = "Mid-Career Salary ($)", range = c((min(chart3.data$Mid.Career.Median.Salary) - 1000), (max(chart3.data$Mid.Career.Median.Salaryy)+1000))),
+        autosize = F, margin = m
+      )
+  })
+  
+  # Mid Career Median Salary By All Majors Chart
+  output$distPlot4 <- renderPlotly({
+    chart4.data <- salariesbymajor %>% filter(is.na(Percent.change.from.Starting.to.Mid.Career.Salary) == FALSE) %>% 
+      filter(Percent.change.from.Starting.to.Mid.Career.Salary > input$range3[1] & Percent.change.from.Starting.to.Mid.Career.Salary < input$range3[2]) %>% 
+      arrange(Percent.change.from.Starting.to.Mid.Career.Salary)
+    
+    plot_ly(
+      y = ~chart4.data$Percent.change.from.Starting.to.Mid.Career.Salary,
+      x = ~chart4.data$Undergraduate.Major,
+      type = "bar",
+      width = 600,
+      height = 700,
+      hoverinfo = 'text',
+      text = ~paste(paste('Major:', chart4.data$Undergraduate.Major),
+                    paste('Percentage Change: ', chart4.data$Percent.change.from.Starting.to.Mid.Career.Salary, sep = ""), sep = "<br />")
+    ) %>% 
+      layout(
+        title = "Percentage Change by Major",
+        xaxis = list(title = "Major", categoryarray = chart4.data$Percent.change.from.Starting.to.Mid.Career.Salary, categoryorder = "array"),
+        yaxis = list(title = "Percentage Change (%)", range = c((min(chart4.data$Percent.change.from.Starting.to.Mid.Career.Salary) - 5), (max(chart4.data$Percent.change.from.Starting.to.Mid.Career.Salary)+5))),
         autosize = F, margin = m
       )
   })
@@ -150,7 +175,8 @@ shinyServer <- function(input, output, session) {
   #Average salaries by type of college bar graph
   output$barplot <- renderPlotly({
     chart.data <- salary.type.data %>%
-      filter(School.Type == input$type)
+      filter(School.Type == input$type) %>% 
+      arrange_(input$salary)
     selectedSalary <- reactive({
       if("Starting.Median.Salary" %in% input$salary) return (chart.data$Starting.Median.Salary)
       if("Mid.Career.Median.Salary" %in% input$salary) return (chart.data$Mid.Career.Median.Salary)
@@ -165,9 +191,9 @@ shinyServer <- function(input, output, session) {
                           paste('Salary: $', selectedSalary(), sep = ""), sep = "<br />")) %>%
       layout(title = 'Average Salaries by Type of College',
              autosize = F, 
-             xaxis = list(size = 5, title = 'Colleges by Type', tickangle = 60),
-             yaxis = list(size = 5, title = 'Salary'), 
-             margin = list(t = 50, b = 500, l = 120, r = 150, pad = 4))
+             xaxis = list(size = 5, title = 'Colleges by Type', tickangle = 60, categoryarray = input$salary, categoryorder = "array"),
+             yaxis = list(size = 5, title = 'Salary ($)'), 
+             margin = list(t = 50, b = 500, l = 50, r = 150, pad = 4))
   })
 }
 
