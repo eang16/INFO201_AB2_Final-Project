@@ -10,23 +10,29 @@ shinyUI(fluidPage(
           # Panel 1: Introduction   
            tabPanel("Introduction", 
                  h4("About Our Project"),
-                 p("Our project provides the users with an overview of salaries based on colleges in the US. Users can examine the salaries based on 
-                   region, major or the type of college with the map and charts."),
+                 p("Our project provides the users with an overview of salaries based on colleges in the US. Users can examine the starting salaries, 
+                    mid career salary and the salary increases based on region, major or the type of college they are interested in with the map and charts."),
+                 br(),
                  h4("Dataset"),
                  p("The dataset is accessed from", a("here", href = "https://www.kaggle.com/wsj/college-salaries"),
                     ". It is obtained from the Wall Street Journal based on data from Payscale, Inc."),
+                 br(),
                  h4("Our Audience"),
                  p("Our target audience is mainly high school and college students who are considering salaries as one of the factors when they apply for schools or majors. 
                     Some of them might be interested to know about their potential future salaries based on different types of colleges, regions and majors.
                     Also, some of them might be interested to compare salaries between where they come from and the other regions."),
                  p("Some questions that could be answered through our project are:"),
                  p("1. Which major has the highest/lowest starting/mid career median salary?"),
-                 p("2. Which type of college has the highest/lowest starting/ mid career median salary?"),
-                 p("3. Which region has the highest/lowest starting/mid career median salary?"),
+                 p("2. What is the starting/mid career median salary of the major I am interested in?"),
+                 p("3. Which region of colleges has the highest/lowest starting/mid career median salary?"),
+                 p("4. If I want to go to an Ivey League college, which Ivy League college has the highest/lowest starting/mid career median salary?"),
+                 p("5. Which college has the highest/lowest starting/mid career median salary, if I want to major in Engineering?"),
+                 p("6. Which college should I go so I can have fun and parties as well as get high salary?"),
+                 br(),
                  h4("Project Creators"),
                  p("Zihui Zhang, Nancy Shih, Meini Fan, Eshin Ang")
-
            ),
+          
            # Panel 2: Salaries By Region Map
            tabPanel("Salaries By Region Map",
                     p("The map shows the location of colleges in the US. Users can hover over the college\'s location to view the college\'s name, 
@@ -34,6 +40,7 @@ shinyUI(fluidPage(
                       On the sidebar panel, users have the option to select the desired regions and select a specific school located in the chosen regions. 
                       Additionally, users can search for specific college\'s name in the search box. 
                       The purple circle marker represents the chosen college."),
+                    
                     sidebarLayout(
                       sidebarPanel(
                         checkboxGroupInput("regionInput", label = h4("Select Region"), 
@@ -44,13 +51,13 @@ shinyUI(fluidPage(
                                                           "Northeastern" = "Northeastern"),
                                            selected = c("California","Western", "Midwestern", "Southern","Northeastern")),
                         uiOutput("selectSchool")
-                        
                       ),
                       mainPanel(
                         leafletOutput("regionmap") 
                       )
                     )
            ),
+          
            # Panel 3:  Average Salaries By Region Chart
            tabPanel("Average Salaries By Region Chart",
                     p("The bar graph shows the average salaries by each region. 
@@ -62,75 +69,76 @@ shinyUI(fluidPage(
                     
                     sidebarLayout(
                       sidebarPanel(
-                        uiOutput("selectSalary")
+                        selectInput('salaries', h4('Select Salary'),
+                                    choices = c("Average Starting Salary" = "Average.Starting.Salary", "Average Mid Career Salary" = "Average.Mid.Career.Salary"),
+                                    selected = '1')
                       ),
                         mainPanel(
                           plotlyOutput("regionbar") 
-                        )
-                      
-                    )
-           ),
-          # Panel 4: Salaries by Individual Major Chart
-          tabPanel("Salaries by Individual Major Chart",
-                   p("This chart displays the Starting Median Salary, Mid Career Median Salary and the 
-                      Salary increase from Starting to Mid Career of each major. The major displayed can be selected by the drop down menu. 
-                     Hovering over each bar will display the salary of the major."),
-                   sidebarLayout(
-                     sidebarPanel(
-                       selectInput("major", h4("Select Major"), 
-                                   choices = list("Accounting" = "Accounting",
-                                                  "Aerospace Engineering" = "Aerospace Engineering",
-                                                  "Agriculture" = "Agriculture",
-                                                  "Anthropology" = "Anthropology",
-                                                  "Architecture" = "Architecture",
-                                                  "Art History" = "Art History",
-                                                  "Biology" = "Biology",
-                                                  "Business Management" = "Business Management",
-                                                  "Chemical Engineering" = "Chemical Engineering",
-                                                  "Chemistry" = "Chemistry",
-                                                  "Civil Engineering" = "Civil Engineering",
-                                                  "Communications" = "Communications",
-                                                  "Computer Engineering" = "Computer Engineering",
-                                                  "Computer Science" = "Computer Science",
-                                                  "Construction" = "Construction",
-                                                  "Criminal Justice" = "Criminal Justice",
-                                                  "Drama" = "Drama",
-                                                  "Economics" = "Economics",
-                                                  "Education" = "Education",
-                                                  "Electrical Engineering" = "Electrical Engineering",
-                                                  "English" = "English",
-                                                  "Film" = "Film",
-                                                  "Finance" = "Finance",
-                                                  "Forestry" = "Forestry",
-                                                  "Geography" = "Geography",
-                                                  "Geology" = "Geology",
-                                                  "Graphic Design" = "Graphic Design",
-                                                  "Health Care Administration" = "Health Care Administration",
-                                                  "History" = "History",
-                                                  "Hospitality & Tourism" = "Hospitality & Tourism",
-                                                  "Industrial Engineering" = "Industrial Engineering",
-                                                  "Information Technology (IT)" = "Information Technology (IT)",
-                                                  "Interior Design" = "Interior Design",
-                                                  "International Relations" = "International Relations",
-                                                  "Journalism" = "Journalism",
-                                                  "Management Info Systems" = "Management Info Systems",
-                                                  "Marketing" = "Marketing",
-                                                  "Math" = "Math",
-                                                  "Mechanical Engineering" = "Mechanical Engineering",
-                                                  "Music" = "Music",
-                                                  "Nursing" = "Nursing",
-                                                  "Nutrition" = "Nutrition",
-                                                  "Philosophy" = "Philosophy",
-                                                  "Physician Assistant" = "Physician Assistant",
-                                                  "Physics" = "Physics",
-                                                  "Political Science" = "Political Science",
-                                                  "Psychology" = "Psychology",
-                                                  "Religion" = "Religion",
-                                                  "Sociology" = "Sociology",
-                                                  "Spanish" = "Spanish"
-                                   ))),
-                     mainPanel(plotlyOutput("distPlot")
-                     ))), 
+                        ))),
+          
+            # Panel 4: Salaries by Individual Major Chart
+            tabPanel("Salaries by Individual Major Chart",
+                     p("This chart displays the Starting Median Salary, Mid Career Median Salary and the 
+                        Salary increase from Starting to Mid Career of each major. The major displayed can be selected by the drop down menu. 
+                       Hovering over each bar will display the salary of the major."),
+                     
+                     sidebarLayout(
+                       sidebarPanel(
+                         selectInput("major", h4("Select Major"), 
+                                     choices = list("Accounting" = "Accounting",
+                                                    "Aerospace Engineering" = "Aerospace Engineering",
+                                                    "Agriculture" = "Agriculture",
+                                                    "Anthropology" = "Anthropology",
+                                                    "Architecture" = "Architecture",
+                                                    "Art History" = "Art History",
+                                                    "Biology" = "Biology",
+                                                    "Business Management" = "Business Management",
+                                                    "Chemical Engineering" = "Chemical Engineering",
+                                                    "Chemistry" = "Chemistry",
+                                                    "Civil Engineering" = "Civil Engineering",
+                                                    "Communications" = "Communications",
+                                                    "Computer Engineering" = "Computer Engineering",
+                                                    "Computer Science" = "Computer Science",
+                                                    "Construction" = "Construction",
+                                                    "Criminal Justice" = "Criminal Justice",
+                                                    "Drama" = "Drama",
+                                                    "Economics" = "Economics",
+                                                    "Education" = "Education",
+                                                    "Electrical Engineering" = "Electrical Engineering",
+                                                    "English" = "English",
+                                                    "Film" = "Film",
+                                                    "Finance" = "Finance",
+                                                    "Forestry" = "Forestry",
+                                                    "Geography" = "Geography",
+                                                    "Geology" = "Geology",
+                                                    "Graphic Design" = "Graphic Design",
+                                                    "Health Care Administration" = "Health Care Administration",
+                                                    "History" = "History",
+                                                    "Hospitality & Tourism" = "Hospitality & Tourism",
+                                                    "Industrial Engineering" = "Industrial Engineering",
+                                                    "Information Technology (IT)" = "Information Technology (IT)",
+                                                    "Interior Design" = "Interior Design",
+                                                    "International Relations" = "International Relations",
+                                                    "Journalism" = "Journalism",
+                                                    "Management Info Systems" = "Management Info Systems",
+                                                    "Marketing" = "Marketing",
+                                                    "Math" = "Math",
+                                                    "Mechanical Engineering" = "Mechanical Engineering",
+                                                    "Music" = "Music",
+                                                    "Nursing" = "Nursing",
+                                                    "Nutrition" = "Nutrition",
+                                                    "Philosophy" = "Philosophy",
+                                                    "Physician Assistant" = "Physician Assistant",
+                                                    "Physics" = "Physics",
+                                                    "Political Science" = "Political Science",
+                                                    "Psychology" = "Psychology",
+                                                    "Religion" = "Religion",
+                                                    "Sociology" = "Sociology",
+                                                    "Spanish" = "Spanish"
+                                     ))),
+                       mainPanel(plotlyOutput("distPlot")
+                       ))), 
           
           # Panel 5: Salaires by All Majors Chart
           tabPanel("Salaries by All Majors Chart", 
@@ -186,6 +194,8 @@ shinyUI(fluidPage(
                      plotlyOutput("distPlot4")
                    )
                    )),
+          
+          # Panel 5: Salaires by Types of College Chart
           tabPanel('Salaries by Type of College Chart',
                    p('The bar graph shows the average salaries by type of colleges. Users can 
                                  select what type of colleges they want to see on the sidebar panel. The graph will list the 
@@ -230,10 +240,9 @@ shinyUI(fluidPage(
                        in the country, also have some of the most famous names."),
                      p(strong("State"), ": Public colleges funded by or associated with the state government."),
                      p("Source:", a("PayScale", href = "https://www.payscale.com/college-salary-report/best-schools-by-type"))
-                     
                      ),
                      mainPanel(
                                plotlyOutput('barplot')))
           )
-)
-))
+)))
+
