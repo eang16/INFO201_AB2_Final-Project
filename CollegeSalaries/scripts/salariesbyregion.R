@@ -1,7 +1,7 @@
+# Load library
 library(dplyr)
-library(leaflet)
-library(htmltools)
-#read data
+
+# Read in the data source for salary information of regions
 salariesbyregion <- read.csv("data/salaries-by-region.csv", stringsAsFactors = FALSE)
 
 # Convert starting salaries to numeric

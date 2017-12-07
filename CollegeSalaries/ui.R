@@ -1,3 +1,4 @@
+# Load Libraries
 library(shiny)
 library(leaflet)
 library(shinythemes)
@@ -6,7 +7,7 @@ library(plotly)
 # Define UI for application that draws a histogram
 shinyUI(fluidPage(
   theme = shinytheme("flatly"), 
-  navbarPage("Salaries by Regions, Majors and Type of Colleges",
+  navbarPage("College Salaries",
           # Panel 1: Introduction   
            tabPanel("Introduction", 
                  h4("About Our Project"),
@@ -25,9 +26,9 @@ shinyUI(fluidPage(
                  p("1. Which major has the highest/lowest starting/mid career median salary?"),
                  p("2. What is the starting/mid career median salary of the major I am interested in?"),
                  p("3. Which region of colleges has the highest/lowest starting/mid career median salary?"),
-                 p("4. If I want to go to an Ivey League college, which Ivy League college has the highest/lowest starting/mid career median salary?"),
-                 p("5. Which college has the highest/lowest starting/mid career median salary, if I want to major in Engineering?"),
-                 p("6. Which college should I go so I can have fun and parties as well as get high salary?"),
+                 p("4. If I want to go to an Ivy League college, which Ivy League college has the highest/lowest starting/mid career median salary?"),
+                 p("5. I am looking at Engineering schools. Which college has the highest/lowest starting/mid career median salary?"),
+                 p("6. Which college should I go to so I can have fun and party while still getting a high salary?"),
                  br(),
                  h4("Project Creators"),
                  p("Zihui Zhang, Nancy Shih, Meini Fan, Eshin Ang")
@@ -160,9 +161,7 @@ shinyUI(fluidPage(
                      of 97.8%, whereas the Physician Assistant major has the lowest percentage salary increase of 23.4%"),
                    
                    sidebarLayout(
-                     
                      sidebarPanel(
-                     
                      sliderInput("range1",
                                  h4("Range of Starting Salary:"),
                                  min = 30000,
@@ -186,7 +185,6 @@ shinyUI(fluidPage(
                                  min = 0,
                                  max = 100,
                                  value = c(0, 100))
-                     
                    ),
                    mainPanel(
                      plotlyOutput("distPlot2"), 

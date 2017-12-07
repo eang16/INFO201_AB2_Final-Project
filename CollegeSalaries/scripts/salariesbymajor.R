@@ -1,5 +1,7 @@
+# Load library
 library(dplyr)
-# Read data
+
+# Read in the data source for salary information of majors
 data<-read.csv("data/degrees-that-pay-back.csv", stringsAsFactors = FALSE)
 
 # Select desired columns 

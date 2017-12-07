@@ -1,0 +1,12 @@
+name: CollegeSalaries
+title: CollegeSalaries
+username:
+account: zihuiz
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 245435
+bundleId: 1120004
+url: https://zihuiz.shinyapps.io/CollegeSalaries/
+when: 1512607899.27065
+asMultiple: FALSE
+asStatic: FALSE

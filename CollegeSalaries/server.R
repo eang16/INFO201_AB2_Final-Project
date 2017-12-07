@@ -1,13 +1,16 @@
+# Load libraries
 library(shiny)
 library(dplyr)
 library(leaflet)
-library(ggplot2)
 library(plotly)
-source("salariesbyregion.R")
-source("salariesbymajor.R")
-source('salariesbytype.R')
+library(htmltools)
 
-salariesbyregion <- read.csv("data/salaries-by-region.csv", stringsAsFactors = FALSE)
+
+# Source R scripts
+source("./scripts/salariesbyregion.R")
+source("./scripts/salariesbymajor.R")
+source('./scripts/salariesbytype.R')
+
 
 shinyServer <- function(input, output, session) {
   
