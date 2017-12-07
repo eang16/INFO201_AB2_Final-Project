@@ -9,7 +9,7 @@ salariesbymajor <- data %>%
   mutate(increase = Mid.Career.Median.Salary - Starting.Median.Salary) %>% 
   select(Undergraduate.Major, Starting.Median.Salary, Mid.Career.Median.Salary, increase, Percent.change.from.Starting.to.Mid.Career.Salary)
 
-# Margin for Salaries by Major graphs
+# Margin for Salaries by All Majors charts
 m <- list(
   l = 50,
   r = 50,
@@ -22,10 +22,15 @@ m <- list(
 makeEachMajorChart <- function(data, major){
   chart.data <- data %>% 
     filter(Undergraduate.Major == major) 
+  typeofsalary <- c("Starting Median Salary", "Mid Career Median Salary", "Salary Increase")
+  salaryamount <- c(chart.data[1,2], chart.data[1,3], chart.data[1,4])
   plot_ly(
-    x = c("Starting Median Salary", "Mid Career Median Salary", "Salary Increase"),
-    y = c(chart.data[1,2], chart.data[1,3], chart.data[1,4]),
-    type = "bar") %>% 
+    x = typeofsalary,
+    y = salaryamount,
+    type = "bar",
+    hoverinfo = 'text',
+    text = ~paste(typeofsalary, ": $", salaryamount, sep = '')
+    ) %>% 
     layout(
       title = "Salaries by Individual Majors",
       xaxis = list(title= major, categoryorder = "array", categoryarray = chart.data[,2:4]),
